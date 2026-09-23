@@ -1,0 +1,35 @@
+name: Update
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - name: Find latest upstream prerelease
+        id: upstream
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh release list --repo "$(jq -r '"\(.owner)/\(.repo)"' source.json)" --limit 30 --json tagName,isPrerelease --jq 'map(select(.isPrerelease))[0].tagName // empty')
+          test -n "$tag"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+      - name: Pin release
+        run: nix develop --command ./update.sh "${{ steps.upstream.outputs.version }}"
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.UPDATE_TOKEN || github.token }}
+          branch: update/icpctools
+          commit-message: "Update icpctools to ${{ steps.upstream.outputs.version }}"
+          title: "Update icpctools to ${{ steps.upstream.outputs.version }}"
+          body: |
+            Upstream release: https://github.com/icpctools/icpctools/releases/tag/v${{ steps.upstream.outputs.version }}
