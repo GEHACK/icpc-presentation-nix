@@ -2,5 +2,9 @@
   "owner": "icpctools",
   "repo": "icpctools",
   "version": "2.7.1422",
-  "hash": "sha256-O5UcmTkNb45uEC4dFNv+5Y9g7M0fKRGFj8FauPDm/3k="
+  "hashes": {
+    "presentations": "sha256-gSxZ00nSH1GRr8KVxeR7NSsPyRpQKJhWpHaDGb9PZXI=",
+    "presentationAdmin": "sha256-EdZn+bR/c97ydYzn/UP4VmCUytGvDtzKirt/YQ2XyE4=",
+    "resolver": "sha256-O5UcmTkNb45uEC4dFNv+5Y9g7M0fKRGFj8FauPDm/3k="
+  }
 }

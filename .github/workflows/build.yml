@@ -13,12 +13,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v31
       - name: Build
-        run: nix build .#default
+        run: nix build .#icpc-presentation .#icpc-presentation-admin .#icpc-resolver
       - name: Smoke test
         run: |
           test -x result/bin/presentation-client
-          grep -q ClientLauncher result/bin/presentation-client
-          for jar in result/share/icpc/lib/*.jar; do
-            unzip -l "$jar" | grep -q 'ClientLauncher\.class' && exit 0
+          for wrapper in result*/bin/*; do
+            class=$(grep -o 'org\.icpc\.tools\.[A-Za-z.]*' "$wrapper" | tail -n1)
+            echo "$wrapper -> $class"
+            for jar in "$(dirname "$wrapper")"/../share/icpc/lib/*.jar; do
+              unzip -l "$jar"
+            done | grep -q " ${class//.//}\.class$"
           done
-          exit 1
