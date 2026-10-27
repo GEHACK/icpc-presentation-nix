@@ -1,4 +1,4 @@
-# icpc-presentation-nix
+# icpc-tools-nix
 
 Nix packages for [ICPC Tools](https://github.com/icpctools/icpctools), built from the upstream release zips, used by
 [genix](https://github.com/GEHACK/genix).
@@ -15,13 +15,13 @@ The packages are listed in `tools.nix`. Adding another tool is a new entry there
 
 ```nix
 {
-  inputs.icpc-presentation.url = "github:GEHACK/icpc-presentation-nix";
+  inputs.icpc-tools.url = "github:GEHACK/icpc-tools-nix";
 }
 ```
 
-Add `inputs.icpc-presentation.overlays.default` to `nixpkgs.overlays` and use any of the packages above, e.g.
+Add `inputs.icpc-tools.overlays.default` to `nixpkgs.overlays` and use any of the packages above, e.g.
 `pkgs.icpc-presentation`. The packages are built against the consumer's nixpkgs, so
-`inputs.icpc-presentation.inputs.nixpkgs.follows = "nixpkgs"` is fine.
+`inputs.icpc-tools.inputs.nixpkgs.follows = "nixpkgs"` is fine.
 
 `presentation-client` takes the CDS contest URL, username and password:
 
